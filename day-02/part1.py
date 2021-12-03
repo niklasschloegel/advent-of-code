@@ -1,6 +1,5 @@
 h_pos = 0
 depth = 0
-aim = 0
 
 # hpos cmds
 FORWARD = "forward"
@@ -9,7 +8,7 @@ FORWARD = "forward"
 DOWN = "down"
 UP = "up"
 
-with open("../input.txt") as input_file:
+with open("input.txt") as input_file:
     lines = input_file.read().splitlines()
     for l in lines:
         cmd, num = l.split()
@@ -17,11 +16,10 @@ with open("../input.txt") as input_file:
 
         if cmd == FORWARD:
             h_pos += num
-            depth += (aim * num)
         elif cmd == DOWN:
-            aim += num
+            depth += num
         elif cmd == UP:
-            aim -= num
+            depth -= num
 
 solution = h_pos * depth
 print("With a horizontal pos {} and a depth of {} the result is {}".format(

@@ -1,6 +1,6 @@
 increase_count = 0
 
-with open("../input.txt") as input_file:
+with open("input.txt") as input_file:
     lines = input_file.read().splitlines()
     for i, l in enumerate(lines):
         if i == 0:

@@ -1,4 +1,4 @@
-with open("../input.txt") as input_file:
+with open("input.txt") as input_file:
     lines = input_file.read().splitlines()
     sums = [sum(list(map(lambda x: int(x), lines[i:i+3])))
             for i in range(len(lines)-2)]
