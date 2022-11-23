@@ -1,4 +1,11 @@
 #! /bin/bash
 
+YEAR=$(date +%Y)
+
+if [ ! -d "$YEAR" ]; then
+    mkdir $YEAR
+fi
+
+cd $YEAR
 DAY=$(find . -maxdepth 1 -regex '^\./day-[0-2][0-9]$' | sort -r | head -n1 | sed 's/.\/day-//g' | { read var; printf "%02d" $((10#$var+1)); })
 mkdir day-$DAY && cd day-$DAY && touch part1.py part2.py simple.txt input.txt && code .
