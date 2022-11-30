@@ -2,6 +2,10 @@
 
 YEAR=$(date +%Y)
 
+if [ "$#" -eq 1 ]; then
+    YEAR=$1
+fi
+
 if [ ! -d "$YEAR" ]; then
     mkdir $YEAR
 fi
