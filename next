@@ -6,6 +6,7 @@ import random
 import shutil
 from argparse import ArgumentParser
 
+BLACKLIST = ["c"]
 today = datetime.date.today()
 
 
@@ -25,7 +26,11 @@ def create_year_folder(year: int):
 
 
 def examine_random_template():
-    templates = [f.path for f in os.scandir("templates") if f.is_dir()]
+    templates = [
+        f.path
+        for f in os.scandir("templates")
+        if f.is_dir() and template_dir_to_techname(f.path) not in BLACKLIST
+    ]
     template = random.choice(templates)
     print(f"Choosing {template}")
     return template
