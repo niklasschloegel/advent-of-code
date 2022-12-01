@@ -1,15 +1,62 @@
-#! /bin/bash
+#! /usr/bin/python3
 
-YEAR=$(date +%Y)
+import datetime
+import os
+import random
+import shutil
+from argparse import ArgumentParser
 
-if [ "$#" -eq 1 ]; then
-    YEAR=$1
-fi
+today = datetime.date.today()
 
-if [ ! -d "$YEAR" ]; then
-    mkdir $YEAR
-fi
 
-cd $YEAR
-DAY=$(find . -maxdepth 1 -regex '^\./day-[0-2][0-9]$' | sort -r | head -n1 | sed 's/.\/day-//g' | { read var; printf "%02d" $((10#$var+1)); })
-mkdir day-$DAY && cd day-$DAY && touch part1.py part2.py simple.txt input.txt && code .
+def template_dir_to_techname(template_dir: str) -> str:
+    slash_index = template_dir.index("/")
+    return template_dir[slash_index + 1 :]
+
+
+def create_year_folder(year: int):
+    dir_name = f"./{year}"
+    if not os.path.exists(dir_name):
+        print(f"No directory for year {year} found. Creating new.")
+        os.makedirs(dir_name)
+    else:
+        print(f"Directory for year {year} already exists.")
+    return dir_name
+
+
+def examine_random_template():
+    templates = [f.path for f in os.scandir("templates") if f.is_dir()]
+    template = random.choice(templates)
+    print(f"Choosing {template}")
+    return template
+
+
+def create_day_folder(year_dir: str, template_dir: str):
+    days = [f.path for f in os.scandir(year_dir) if f.is_dir()]
+    new_day = len(days) + 1
+
+    print(
+        f"Creating in {year_dir} for day {new_day} with technology {template_dir_to_techname(template_dir)}"
+    )
+
+    dir_name = f"{year_dir}/day-{new_day:02}"
+    shutil.copytree(template_dir, dir_name)
+
+
+def main():
+    parser = ArgumentParser(description="Create next AoC project from templates")
+    parser.add_argument("-y", "--year", type=int, default=today.year)
+
+    args = vars(parser.parse_args())
+    if not args:
+        parser.print_help()
+    else:
+        year = args["year"]
+
+        year_dir = create_year_folder(year)
+        template = examine_random_template()
+        create_day_folder(year_dir, template)
+
+
+if __name__ == "__main__":
+    main()
