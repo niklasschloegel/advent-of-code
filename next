@@ -46,15 +46,24 @@ def create_day_folder(year_dir: str, template_dir: str):
 def main():
     parser = ArgumentParser(description="Create next AoC project from templates")
     parser.add_argument("-y", "--year", type=int, default=today.year)
+    parser.add_argument("-t", "--technology", type=str, required=False)
 
     args = vars(parser.parse_args())
     if not args:
         parser.print_help()
     else:
         year = args["year"]
+        technology = args["technology"]
 
         year_dir = create_year_folder(year)
-        template = examine_random_template()
+        if technology:
+            template = f"templates/{technology.lower()}"
+            if not os.path.exists(template):
+                print(f"Invalid technology: {technology}")
+                exit(-1)
+        else:
+            template = examine_random_template()
+
         create_day_folder(year_dir, template)
 
 
