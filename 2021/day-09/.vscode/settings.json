@@ -1,0 +1,4 @@
+{
+  "python.pythonPath": "/opt/homebrew/opt/python@3.8/bin/python3",
+  "python.formatting.provider": "black"
+}
