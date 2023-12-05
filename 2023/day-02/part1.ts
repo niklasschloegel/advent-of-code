@@ -51,8 +51,9 @@ function solve(data: string): string {
     game.revealedCubes.every(({ red, green, blue }) =>
       red <= maxRed && green <= maxGreen && blue <= maxBlue
     )
-  ).map((game) => game.id)
-    .reduce((sum, id) => sum + id, 0);
+  )
+    .map((game) => game.id)
+    .reduce((sum, id) => sum + id, 0).toString();
 }
 // --------------------------- END SOLUTION CODE ---------------------------
 
