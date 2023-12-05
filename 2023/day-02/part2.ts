@@ -9,9 +9,60 @@ function debug(...data: any[]) {
 }
 
 // ----------------------------- SOLUTION CODE -----------------------------
+interface RevealedCubes {
+  red: number;
+  green: number;
+  blue: number;
+}
+const colors: (keyof RevealedCubes)[] = ["red", "green", "blue"];
+
+interface Game {
+  id: number;
+  revealedCubes: RevealedCubes[];
+}
+
+function parseGame(line: string): Game {
+  const gamePrefix = "Game ";
+  const idSeparator = ":";
+  const separatorIndex = line.indexOf(idSeparator);
+  const id = parseInt(line.substring(gamePrefix.length, separatorIndex));
+
+  const gameContent = line.substring(separatorIndex + 1);
+  const draws = gameContent.trim().split(";");
+  const revealedCubes = draws.map((draw) =>
+    draw.trim().split(",").reduce<RevealedCubes>(
+      (revealedCubes, revelation) => {
+        const [amount, color] = revelation.trim().split(" ");
+        return { ...revealedCubes, [color]: parseInt(amount) };
+      },
+      { red: 0, green: 0, blue: 0 },
+    )
+  );
+  return { id, revealedCubes };
+}
+
+function findMax(
+  color: keyof RevealedCubes,
+  revealedCubes: RevealedCubes[],
+): number {
+  let max = 0;
+  for (const cubes of revealedCubes) {
+    const amount = cubes[color];
+    if (amount > max) {
+      max = amount;
+    }
+  }
+  return max;
+}
+
 function solve(data: string): string {
-  // TODO: solve
-  return "";
+  const games = data.split("\n").map(parseGame);
+  return games.map((game) =>
+    colors.map((color) => findMax(color, game.revealedCubes)).reduce(
+      (pow, max) => pow * max,
+      1,
+    )
+  ).reduce((powSum, pow) => pow + powSum, 0).toString();
 }
 // --------------------------- END SOLUTION CODE ---------------------------
 
